@@ -21,4 +21,11 @@ class Projects extends Model
         'actual_end',
         'description',
     ];
+
+    public function scopeSearch($query, $search)
+    {
+        return $query->when($search, function ($query, $search) {
+            $query->where('name', 'like', "%{$search}%");
+        });
+    }
 }
