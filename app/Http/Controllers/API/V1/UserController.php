@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\API\V1;
 
-use App\Helpers\ApiResponse;
-use App\Http\Resources\PaginatedResource;
 use App\Models\User;
+use App\Helpers\ApiResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\Http\Requests\GetUsersRequest;
 use App\Http\Requests\StoreUserRequest;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\UpdateUserRequest;
-use App\Http\Resources\UserResource;
+use App\Http\Resources\PaginatedResource;
 
 class UserController extends Controller
 {
@@ -87,6 +88,22 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = User::find($id);
+        if (!$user) {
+            return ApiResponse::error(
+                'User not found',
+                404,
+            );
+        }
+
+        if ($user->photo) {
+            Storage::disk('public')->delete($user->photo);
+        }
+        $user->delete();
+
+        return ApiResponse::success(
+            null,
+            'User Deleted successfully',
+        );
     }
 }

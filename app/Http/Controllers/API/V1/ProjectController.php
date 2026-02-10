@@ -6,6 +6,7 @@ use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetProjectRequest;
 use App\Http\Requests\StoreProjectRequest;
+use App\Http\Requests\UpdateProjectRequest;
 use App\Http\Resources\PaginatedResource;
 use App\Http\Resources\ProjectResource;
 use App\Models\Projects;
@@ -48,22 +49,52 @@ class ProjectController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $project = Projects::find($id);
+        if (!$project) {
+            return ApiResponse::error(
+                'Project not found',
+                404
+            );
+        }
+
+        return ApiResponse::success(
+            new ProjectResource($project),
+            'Project Details'
+        );
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateProjectRequest $request, string $id)
     {
-        //
+        $project = Projects::find($id);
+        if (!$project) {
+            return ApiResponse::error(
+                'Project not found',
+                404
+            );
+        }
+        $project->update($request->validated());
+        return ApiResponse::success(
+            new ProjectResource($project),
+            'Project Updated Successfully'
+        );
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        //
+        $project = Projects::find($id);
+        if (!$project) {
+            return ApiResponse::error(
+                'Project not found',
+                404
+            );
+        }
+        $project->delete();
+        return ApiResponse::success(
+            null,
+            'Project Deleted Successfully'
+        );
     }
 }
