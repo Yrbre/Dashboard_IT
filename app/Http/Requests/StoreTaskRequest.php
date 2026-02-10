@@ -35,7 +35,7 @@ class StoreTaskRequest extends FormRequest
             'start_task'    => 'required|date',
             'end_task'      => 'required|date|after_or_equal:start_task',
             'problem'       => 'required|string',
-            'analysts'      => 'required|string',
+            'analyst'      => 'required|string',
             'solution'      => 'required|string',
         ];
     }
