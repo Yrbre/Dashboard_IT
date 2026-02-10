@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetUsersRequest;
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 
 class UserController extends Controller
@@ -57,7 +58,7 @@ class UserController extends Controller
 
         return ApiResponse::success(
             new UserResource($user),
-            'User Details',
+            'User Details'
 
         );
     }
@@ -65,9 +66,20 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateUserRequest $request, string $id)
     {
-        //
+        $user = User::find($id);
+        if (!$user) {
+            return ApiResponse::error(
+                'User not found',
+                404,
+            );
+        }
+        $user->update($request->validated());
+        return ApiResponse::success(
+            new UserResource($user),
+            "User Updated successfully"
+        );
     }
 
     /**
