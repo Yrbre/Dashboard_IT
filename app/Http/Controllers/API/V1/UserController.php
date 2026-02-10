@@ -1,44 +1,43 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1;
+namespace App\Http\Controllers\API\V1;
 
 use App\Helpers\ApiResponse;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\GetProjectRequest;
-use App\Http\Requests\StoreProjectRequest;
 use App\Http\Resources\PaginatedResource;
-use App\Http\Resources\ProjectResource;
-use App\Models\Projects;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\GetUsersRequest;
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Resources\UserResource;
 
-class ProjectController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(GetProjectRequest $request)
+    public function index(GetUsersRequest $request)
     {
-        $projects = Projects::search($request->search)
+        $users = User::search($request->search)
             ->latest()
             ->paginate($request->limit ?? 10);
 
         return ApiResponse::success(
-            new PaginatedResource($projects, ProjectResource::class),
-            'Projects List'
+            new PaginatedResource($users, UserResource::class),
+            'Users List',
         );
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreProjectRequest $request)
+    public function store(StoreUserRequest $request)
     {
-        $project = Projects::create($request->validated());
+        $user = User::create($request->validated());
 
         return ApiResponse::success(
-            new ProjectResource($project),
-            'Project Created Successfully',
+            new UserResource($user),
+            'User Created Successfully',
             201,
         );
     }

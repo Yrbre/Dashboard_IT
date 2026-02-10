@@ -22,7 +22,7 @@ class AuthController extends Controller
         if (!$user || !Hash::check($credential['password'], $user->password)) {
             return ApiResponse::error(
                 'Invalid credentials',
-                Response::HTTP_UNAUTHORIZED
+                401,
             );
         }
         $token = $user->createToken('auth_token')->plainTextToken;
