@@ -47,7 +47,19 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $user = User::find($id);
+        if (!$user) {
+            return ApiResponse::error(
+                'User not found',
+                404,
+            );
+        }
+
+        return ApiResponse::success(
+            new UserResource($user),
+            'User Details',
+
+        );
     }
 
     /**
