@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\V1\AuthController;
 use App\Http\Controllers\Api\V1\ProjectController;
+use App\Http\Controllers\Api\V1\TaskController;
 use App\Http\Controllers\API\V1\UserController;
 use App\Http\Controllers\Api\V1\UserImageController;
 use Illuminate\Http\Request;
@@ -16,5 +17,6 @@ Route::prefix('v1')->group(function () {
         Route::post('/users/{id}/upload-image', [UserImageController::class, 'store']);
         Route::apiResource('/users', UserController::class);
         Route::apiResource('/projects', ProjectController::class);
+        Route::apiResource('/tasks', TaskController::class);
     });
 });
